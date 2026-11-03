@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0d1d31">
+  <meta name="description" content="ViLo brings vision-language priors to map-free LiDAR localization during training, then runs with LiDAR alone at inference. NeurIPS 2026.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="ViLo | LiDAR Localization with Vision-Language Priors">
+  <meta property="og:description" content="Scene-adaptive localization with vision-language guidance in training and LiDAR-only inference.">
+  <meta property="og:url" content="https://reckozmh.github.io/ViLo/">
+  <meta property="og:image" content="https://reckozmh.github.io/ViLo/FIG/FIG1.png">
+  <title>ViLo — LiDAR Localization with Vision-Language Priors</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div id="top"></div>
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="wordmark" href="#top" aria-label="ViLo home"><span class="wordmark-mark">V</span><span>ViLo<span class="wordmark-dot">.</span></span></a>
+      <nav aria-label="Main navigation">
+        <a href="#overview">Overview</a>
+        <a href="#motivation">Why ViLo</a>
+        <a href="#method">Method</a>
+        <a href="#results">Results</a>
+        <a href="#paper">Paper</a>
+      </nav>
+      <a class="header-paper" href="Paper/ViLo_LiDAR_Localization_with_Vision-Language_Priors.pdf" target="_blank" rel="noopener">Read PDF <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero shell" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="status-pulse" aria-hidden="true"></span> NeurIPS 2026 <span class="eyebrow-divider"></span> Research project</div>
+        <p class="hero-kicker">Learning to localize across changing scenes</p>
+        <h1 id="hero-title"><span>ViLo</span><br>LiDAR Localization with <em>Vision-Language Priors</em></h1>
+        <p class="hero-lede">A scene-adaptive approach that learns from vision-language reasoning during training and localizes with <strong>LiDAR alone</strong> at inference.</p>
+        <p class="authors"><strong>Minghang Zhu<sup>*</sup></strong> · <strong>Jianshi Wu<sup>*</sup></strong> · <strong>Yuxin Guo<sup>*</sup></strong> · Wen Li · Penghui Shang · Sheng Ao · Cheng Wang<sup>†</sup></p>
+        <p class="author-note">* Equal contribution &nbsp; † Corresponding author · Xiamen University and collaborators</p>
+        <div class="hero-actions">
+          <a class="button button-light" href="Paper/ViLo_LiDAR_Localization_with_Vision-Language_Priors.pdf" target="_blank" rel="noopener">Read the paper <span aria-hidden="true">↗</span></a>
+          <a class="button button-ghost" href="#motivation">See the idea <span aria-hidden="true">↓</span></a>
+          <span class="code-status">Code in preparation</span>
+        </div>
+      </div>
+      <div class="hero-visual" aria-label="Conceptual illustration of LiDAR-only localization guided by scene knowledge learned during training">
+        <div class="hero-visual-top"><span>THE CORE IDEA</span><span>TRAIN SMART · DEPLOY LIGHT</span></div>
+        <div class="hero-scan">
+          <div class="scan-grid" aria-hidden="true"></div>
+          <div class="scan-ring scan-ring-one" aria-hidden="true"></div>
+          <div class="scan-ring scan-ring-two" aria-hidden="true"></div>
+          <div class="scan-ring scan-ring-three" aria-hidden="true"></div>
+          <div class="scan-ray" aria-hidden="true"></div>
+          <div class="scan-vehicle" aria-hidden="true"><span></span></div>
+          <span class="scan-point p1"></span><span class="scan-point p2"></span><span class="scan-point p3"></span><span class="scan-point p4"></span><span class="scan-point p5"></span><span class="scan-point p6"></span><span class="scan-point p7"></span><span class="scan-point p8"></span><span class="scan-point p9"></span><span class="scan-point p10"></span><span class="scan-point p11"></span><span class="scan-point p12"></span><span class="scan-point p13"></span><span class="scan-point p14"></span><span class="scan-point p15"></span><span class="scan-point p16"></span>
+          <span class="scan-label scan-label-left">LiDAR points</span>
+          <span class="scan-label scan-label-right">Adaptive experts</span>
+        </div>
+        <div class="hero-visual-bottom"><span><i class="legend-dot legend-cyan"></i> Scene understanding</span><span><i class="legend-dot legend-lime"></i> Global pose</span></div>
+      </div>
+    </section>
+
+    <section class="overview section" id="overview" aria-labelledby="overview-title">
+      <div class="shell">
+        <div class="section-heading">
+          <div><p class="section-index">01 / Overview</p><h2 id="overview-title">Better localization begins with <em>understanding the scene.</em></h2></div>
+          <p>Conventional scene-coordinate regression often asks one network to learn from every environment in the same way. Occlusions, changing structures, and ambiguous geometry make that difficult.</p>
+        </div>
+        <div class="overview-cards">
+          <article><span class="card-number">01</span><h3>See what matters</h3><p>A vision-language model reasons about scene degradations at selected key frames during training.</p></article>
+          <article><span class="card-number">02</span><h3>Learn adaptively</h3><p>Scene priors guide local, mid-range, and global experts rather than forcing one network to fit all conditions.</p></article>
+          <article><span class="card-number">03</span><h3>Deploy with LiDAR</h3><p>Cross-modal distillation transfers that guidance into the 3D backbone. Images and the VLM are not needed at inference.</p></article>
+        </div>
+        <figure class="paper-figure">
+          <a href="FIG/FIG1.png" target="_blank" rel="noopener" aria-label="Open Figure 1 at full size"><img src="FIG/FIG1.png" alt="Figure 1 compares earlier single-network LiDAR localization approaches with ViLo's VLM-guided experts and shows Oxford and NCLT translation-error comparisons." width="1720" height="543"></a>
+          <figcaption><span>FIGURE 01</span> From one-size-fits-all regression to scene-adaptive localization. <a href="FIG/FIG1.png" target="_blank" rel="noopener">Open full size ↗</a></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="motivation section" id="motivation" aria-labelledby="motivation-title">
+      <div class="shell">
+        <div class="section-heading">
+          <div><p class="section-index">02 / The motivation</p><h2 id="motivation-title">A bus is not a <em>building.</em></h2></div>
+          <p>Rigid semantic labels can confuse transient objects with useful landmarks. ViLo uses open-vocabulary scene reasoning to recognize when geometry is unreliable, then adapts how its experts learn.</p>
+        </div>
+        <div class="demo-panel">
+          <div class="demo-intro">
+            <div><p class="demo-label">INTERACTIVE EXPLAINER</p><h3>How scene context changes the route</h3><p>Select a scene to see the qualitative expert emphasis described in the paper. This is a conceptual animation, not a replay of measured per-frame weights.</p></div>
+            <div class="scene-controls" role="group" aria-label="Choose an illustrative scene">
+              <button type="button" class="scene-button is-active" data-scene-button="occlusion" aria-pressed="true">Occluded street</button>
+              <button type="button" class="scene-button" data-scene-button="vegetation" aria-pressed="false">Vegetation</button>
+              <button type="button" class="scene-button" data-scene-button="open" aria-pressed="false">Open road</button>
+            </div>
+          </div>
+          <div class="demo-body">
+            <div class="scene-visual" id="scene-visual" data-scene="occlusion" aria-hidden="true">
+              <div class="scene-sky"></div><div class="scene-building building-one"></div><div class="scene-building building-two"></div><div class="scene-building building-three"></div><div class="scene-tree tree-one"></div><div class="scene-tree tree-two"></div><div class="scene-road"></div><div class="scene-road-line"></div><div class="scene-bus"><span>BUS</span></div><div class="scene-sweep"></div><div class="scene-lidar"><span></span></div>
+              <div class="scene-tag" id="scene-tag">DYNAMIC OCCLUSION</div>
+            </div>
+            <div class="reasoning">
+              <div class="reasoning-step"><span class="step-marker">01</span><div><small>SCENE</small><p id="scene-description">A moving bus hides stable structures in a narrow street.</p></div></div>
+              <div class="reasoning-connector" aria-hidden="true"></div>
+              <div class="reasoning-step"><span class="step-marker">02</span><div><small>VLM PRIOR · TRAINING ONLY</small><p id="scene-prior">Treat transient occlusion as unreliable geometry.</p></div></div>
+              <div class="reasoning-connector" aria-hidden="true"></div>
+              <div class="reasoning-step"><span class="step-marker">03</span><div class="expert-panel"><small>SCENE-ADAPTIVE EXPERTS</small><div class="expert-row"><span>Local</span><i><b id="expert-local"></b></i></div><div class="expert-row"><span>Mid-range</span><i><b id="expert-mid"></b></i></div><div class="expert-row"><span>Global</span><i><b id="expert-global"></b></i></div><p id="scene-explanation">Mid-range and global context receive more emphasis in the paper's occluded-street example.</p></div></div>
+            </div>
+          </div>
+        </div>
+        <figure class="paper-figure">
+          <a href="FIG/FIG2.png" target="_blank" rel="noopener" aria-label="Open Figure 2 at full size"><img src="FIG/FIG2.png" alt="Figure 2 illustrates transient-bus occlusion and why VLM-guided mixture-of-experts learning helps with different degraded scenes." width="1720" height="472" loading="lazy"></a>
+          <figcaption><span>FIGURE 02</span> The paper's motivation: scene localizability and capacity interference. <a href="FIG/FIG2.png" target="_blank" rel="noopener">Open full size ↗</a></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="method section" id="method" aria-labelledby="method-title">
+      <div class="shell">
+        <div class="section-heading">
+          <div><p class="section-index">03 / Method</p><h2 id="method-title">Learn with vision.<br><em>Localize with LiDAR.</em></h2></div>
+          <p>The expensive scene reasoning stays in the training pipeline. The deployed model uses only point clouds to estimate a global 6-DoF pose.</p>
+        </div>
+        <div class="method-steps">
+          <article><div class="method-icon">01<span>↗</span></div><h3>Key-frame reasoning</h3><p>Query selected visual key frames and reuse previous context to obtain temporally consistent, open-vocabulary degradation priors.</p><span class="method-phase">TRAINING</span></article>
+          <article><div class="method-icon">02<span>✳</span></div><h3>Adaptive experts</h3><p>Route point-cloud features through three scale-aware experts, with a confidence gate that softens uncertain routing.</p><span class="method-phase">TRAINING + INFERENCE</span></article>
+          <article><div class="method-icon">03<span>→</span></div><h3>Cross-modal distillation</h3><p>Align LiDAR features with the scene prior so the VLM and camera imagery can be removed at deployment.</p><span class="method-phase">LIDAR-ONLY INFERENCE</span></article>
+        </div>
+        <div class="inference-strip"><span class="strip-label">AT DEPLOYMENT</span><span class="strip-flow">Point cloud <b>→</b> 3D backbone <b>→</b> adaptive experts <b>→</b> global pose</span><span class="strip-note">No image or VLM input</span></div>
+        <figure class="paper-figure">
+          <a href="FIG/FIG3.png" target="_blank" rel="noopener" aria-label="Open Figure 3 at full size"><img src="FIG/FIG3.png" alt="Figure 3 shows ViLo's key-frame VLM priors, scale-aware mixture-of-experts, adaptive routing, distillation, and LiDAR-only inference paths." width="1630" height="729" loading="lazy"></a>
+          <figcaption><span>FIGURE 03</span> Full ViLo architecture from the paper. <a href="FIG/FIG3.png" target="_blank" rel="noopener">Open full size ↗</a></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="results section" id="results" aria-labelledby="results-title">
+      <div class="shell">
+        <div class="section-heading">
+          <div><p class="section-index">04 / Evidence</p><h2 id="results-title">Improvement where<br><em>the road gets difficult.</em></h2></div>
+          <p>Mean translation error on the Oxford RobotCar and NCLT test sets, compared with GTRLoc in the supplied manuscript. Lower is better.</p>
+        </div>
+        <div class="results-grid">
+          <article class="result-card"><div class="result-head"><span>QUALITY-ENHANCED OXFORD</span><strong>−20%</strong></div><h3><span>0.60</span> m <small>mean position error</small></h3><div class="bar-compare"><div><span>GTRLoc</span><i><b style="width:100%"></b></i><em>0.75 m</em></div><div class="bar-vilo"><span>ViLo</span><i><b style="width:80%"></b></i><em>0.60 m</em></div></div><p>33 ms per frame in the paper's Oxford runtime comparison.</p></article>
+          <article class="result-card"><div class="result-head"><span>NCLT</span><strong>−51%</strong></div><h3><span>0.69</span> m <small>mean position error</small></h3><div class="bar-compare"><div><span>GTRLoc</span><i><b style="width:100%"></b></i><em>1.40 m</em></div><div class="bar-vilo"><span>ViLo</span><i><b style="width:49%"></b></i><em>0.69 m</em></div></div><p>53 ms per frame in the paper's NCLT runtime comparison.</p></article>
+        </div>
+        <p class="results-source">Source: ViLo manuscript, Tables 1–3. Error reductions are relative to the GTRLoc mean translation errors shown above; runtime figures are from the paper's test setup.</p>
+      </div>
+    </section>
+
+    <section class="figure-section section" id="figures" aria-labelledby="figures-title">
+      <div class="shell figure-section-grid">
+        <div><p class="section-index">05 / Interpretability</p><h2 id="figures-title">Different streets.<br><em>Different expertise.</em></h2><p>Figure 7 visualizes how the contribution of local, mid-range, and global experts changes across representative Oxford regions. Occluded streets favor broader context; vegetation-heavy areas emphasize mid-range structure; open roads rely more on global context.</p><a class="text-link" href="FIG/FIG7.png" target="_blank" rel="noopener">Explore Figure 7 at full size <span aria-hidden="true">↗</span></a></div>
+        <figure class="paper-figure"><a href="FIG/FIG7.png" target="_blank" rel="noopener" aria-label="Open Figure 7 at full size"><img src="FIG/FIG7.png" alt="Figure 7 shows Oxford route regions A through D, their street images, and curves for the three expert contribution weights." width="1920" height="480" loading="lazy"></a><figcaption><span>FIGURE 07</span> Adaptive expert contributions across Oxford scenes.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="paper-section section" id="paper" aria-labelledby="paper-title">
+      <div class="shell paper-grid">
+        <div>
+          <p class="section-index">06 / Read & share</p>
+          <h2 id="paper-title">Dive into <em>the paper.</em></h2>
+          <p class="paper-description">ViLo: LiDAR Localization with Vision-Language Priors · NeurIPS 2026. The full manuscript includes methodology, benchmarks, ablations, and qualitative visualizations.</p>
+          <div class="paper-actions"><a class="button button-dark" href="Paper/ViLo_LiDAR_Localization_with_Vision-Language_Priors.pdf" target="_blank" rel="noopener">Open manuscript PDF <span aria-hidden="true">↗</span></a><button class="button button-outline" type="button" id="copy-link">Copy project link <span aria-hidden="true">⧉</span></button></div>
+          <p class="release-note"><strong>Code release:</strong> The GitHub code is being organized for public release. A code link will be added when it is ready.</p>
+          <p class="contact-line">Questions? <a href="mailto:mihoo@stu.xmu.edu.cn">mihoo@stu.xmu.edu.cn</a></p>
+        </div>
+        <a class="qr-card" href="https://reckozmh.github.io/ViLo/" aria-label="Open ViLo project website">
+          <span class="qr-topline">SCAN TO VISIT</span>
+          <img src="assets/vilo-qr.png" alt="QR code for https://reckozmh.github.io/ViLo/" width="512" height="512" loading="lazy">
+          <span class="qr-address">reckozmh.github.io/ViLo/</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="shell footer-inner"><span class="footer-brand">ViLo<span>.</span></span><span>LiDAR Localization with Vision-Language Priors</span><a href="#top">Back to top ↑</a></div></footer>
+</body>
+</html>
